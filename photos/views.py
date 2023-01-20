@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions, generics
+from rest_framework import viewsets, permissions
 
 from photos.models import Photo
 from photos.serializers import PhotoSerializer
@@ -6,22 +6,31 @@ from photos.serializers import PhotoSerializer
 
 class PhotoViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows users to be viewed or edited.
+    # Endpoint da API para visualizar, criar, editar ou deletar algum item.
+
+    Podem ser consultadas todas as fotos, assim como a pesquisa/filtragem destas. **(Via Query Parameters)**
+
+     - ?name=**NOME_DA_FOTO**  *(string)*
+
+     - ?place=**LOCAL**  *(string)*
+
+     - ?initial_date=**DATA_INICAL**&final_date=**DATA_FINAL**  *(ISO 8601)*
+
+     - ?photographer=**NOME_DO_FOTÓGRAFO**  *(string)*
+     
+     - ?camera_flash=**TRUE_OR_FALSE**  *(boolean)*
+
     """
     queryset = Photo.objects.all()
     serializer_class = PhotoSerializer
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        """
-        Optionally restricts the returned purchases to a given user,
-        by filtering against a `username` query parameter in the URL.
-        """
         queryset = Photo.objects.all()
         name = self.request.query_params.get('name')
         place = self.request.query_params.get('place')
         initial_date = self.request.query_params.get('initial_date')
-        final_date = self.request.query_params.get('initial_date')
+        final_date = self.request.query_params.get('final_date')
         photographer = self.request.query_params.get('photographer')
         camera_flash = self.request.query_params.get('camera_flash')
 
